@@ -20,8 +20,12 @@ func (r *UserRepository) Create(data models.User) (models.User, error) {
 	return data, nil
 }
 
-func (r *UserRepository) GetByID(id uint64) error {
-	return r.db.First(&models.User{}, id).Error
+func (r *UserRepository) GetByID(id uint64) (models.User, error) {
+	var user models.User
+	if err := r.db.First(&user, id).Error; err != nil {
+		return models.User{}, err
+	}
+	return user, nil
 }
 
 func (r *UserRepository) Update(data models.User) error {
